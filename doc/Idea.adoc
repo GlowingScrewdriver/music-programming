@@ -1,0 +1,40 @@
+= Music Programming Language
+
+== What is Music Programming?
+// TODO
+
+== Goals
+* Build around the Indian Classical Music model
+* High-level -- focus on musical constructs rather
+  than more generic audio constructs
+
+=== Explicit Non-Goals
+* Support for general-purpose programming
+  constructs (data structures, functions, etc.)
+* Extensibility to models of music other than
+  Indian Classical
+
+== The Music Model
+As mentioned earlier, this language will be
+built around the Indian Classical music model.
+This means that constructs like _gamakam_ will
+have first-class support, while constructs like
+chords will take a back seat.
+
+[%header,cols="1,1,1"]
+|===
+|Construct
+|Description
+|Sample
+
+|Note
+|A single frequency
+|
+
+|_gamakam_
+|A variation of frequency w.r.t time, applied to a note
+|
+|===
+
+== Challenges
+// TODO
