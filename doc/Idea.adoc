@@ -53,24 +53,24 @@ notation systems.
 The programming model, inspired by classical
 notation systems, will be along these lines:
 
-:fn-strike: footnote:["striking" is the action
-that makes sound. For example, plucking a
-string, or tapping a membrane.]
-:fn-instrument: footnote:[an instrument is
-characterised by its waveform at various
-notes]
-
 * A *tune* is made up of a series of *notes*
 * Each *note* lasts for a certain *duration* of time
 * A *note* may have a *_gamakam_* applied to it
-* The *tune* is played on some *instrument*{fn-instrument}
-* The *instrument* may be *struck* at any instance
-  of a *note*{fn-strike}
+* The *tune* is played on some *instrument* ^1^
+* The *instrument* may be *struck* ^2^ at any instance
+  of a *note*
+
+'''
+
+1. an instrument is characterised by its waveform at
+  various notes
+2. "striking" is the action that makes sound. For example,
+  plucking a string, or tapping a membrane.
 
 <<<
 
 == A Note on _gamakam_
-A _gamakam_ is, a controlled variation
+A _gamakam_ is a controlled variation
 of a note's frequency with time. This concept,
 in its various forms, is a cornerstone of
 Indian music genres.
@@ -96,12 +96,9 @@ with different names.
 <<<
 
 == Borrowing from General-Purpose Programming
-:fn-vars: footnote:[in a very restricted sense;
-more on this in the next slide]
-
 This language will borrow a very limited set
 of ideas from general-purpose programming,
-each of which supports some technique used
+each of which maps to some technique used
 in notation:
 
 * Loops (for repeating lines)
