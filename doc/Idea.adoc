@@ -2,44 +2,158 @@
 
 <<<
 
-== What is Music Programming?
-// TODO
+== The Idea
+A language to _programmatically synthesize
+Indian Music_
+
+This slide deck details the goals, rationale
+and approach to design of this language. In
+addition, options for the technology stack
+for the compiler are also discussed.
+
 <<<
 
 == Goals
-* Build around the Indian Classical Music model
-* High-level -- focus on musical constructs rather
-  than more generic audio constructs
+* Support for the Carnatic classical music model
+  (at least)
+* High-level -- focus on _musical_ constructs,
+  rather than more generic _audio_ constructs
+* Interoperability with standard interfaces
+// TODO[Vamshi]: Can we promise this? Interfacing
+// with MIDI is the only way I can think of doing
+// this ATM.
 
 === Explicit Non-Goals
 * Support for general-purpose programming
   constructs (data structures, functions, etc.)
-* Extensibility to models of music other than
-  Indian Classical
+* Extensibility to models of music outside
+  the Indian umbrella
+* Turing-completeness
+
+<<<
+
+== Approach to Language Design
+Much inspiration is drawn from existing
+notation systems.
+
+* Both the Carnatic and Hindustani styles of
+  Indian classical music have well-established
+  systems of notation
+* Many concepts of classical music can
+  be generalized to other genres of Indian
+  music as well
+// TODO[Varsha]: Is the above true?
+* Thus, these notational systems already capture
+  many of the constructs that our language
+  would support
+
 <<<
 
 == The Music Model
-As mentioned earlier, this language will be
-built around the Indian Classical music model.
-This means that constructs like _gamakam_ will
-have first-class support, while constructs like
-chords will take a back seat.
+The programming model, inspired by classical
+notation systems, will be along these lines:
 
-[%header,cols="1,1,1"]
-|===
-|Construct
-|Description
-|Sample
+:fn-strike: footnote:["striking" is the action
+that makes sound. For example, plucking a
+string, or tapping a membrane.]
+:fn-instrument: footnote:[an instrument is
+characterised by its waveform at various
+notes]
 
-|Note
-|A single frequency
-|
+* A *tune* is made up of a series of *notes*
+* Each *note* lasts for a certain *duration* of time
+* A *note* may have a *_gamakam_* applied to it
+* The *tune* is played on some *instrument*{fn-instrument}
+* The *instrument* may be *struck* at any instance
+  of a *note*{fn-strike}
 
-|_gamakam_
-|A variation of frequency w.r.t time, applied to a note
-|
-|===
 <<<
 
-== Challenges
-// TODO
+== A Note on _gamakam_
+A _gamakam_ is, a controlled variation
+of a note's frequency with time. This concept,
+in its various forms, is a cornerstone of
+Indian music genres.
+// TODO[Varsha]: Is this too much of a
+// blanked statement? Can we really model
+// other forms of music with careful
+// usage of gamakams?
+
+A sound at a single frequency is a flat note:
+// TODO: Insert audio sample
+
+However, when the frequency of this note is
+oscillated with time, we get a "quivering"
+note:
+// TODO: Insert audio sample
+
+This type of _gamakam_ is called the _kampitam_.
+
+NOTE: All of this is in Carnatic parlance, but
+is applicable to other forms of music, albeit
+with different names.
+
+<<<
+
+== Borrowing from General-Purpose Programming
+:fn-vars: footnote:[in a very restricted sense;
+more on this in the next slide]
+
+This language will borrow a very limited set
+of ideas from general-purpose programming,
+each of which supports some technique used
+in notation:
+
+* Loops (for repeating lines)
+* Variables (for aliases and shorthands)
+* Type checking (a _gamakam_ is applied to a
+  note, not an instrument)
+* Parallelism (for simultaneous instruments)
+
+Certain ideas are overkills for this
+language, like user-defined functions,
+control flow structures and user-defined data
+types.
+
+<<<
+
+== On Variables
+The main purposes of variables will be code
+reuse and shorthands. To support these
+causes, this language will adopt a
+limited model of variable use:
+
+* Variables can be assigned only once
+* No forward declarations or type declarations
+* Variable references will be type-checked
+
+<<<
+
+== The Compiler Interface
+* The first iteration of the compiler will
+  support a file-based interface (either using
+  a filesystem or stdin/stdout), where
+  - the input is a string, holding a program
+    describing a tune
+  - the output is a file capturing the tune
+* Implementing playback as a mode
+  of output on top of this base is trivial
+* Other modes of operation, such as an API or
+  a REPL, are second priority.
+
+////
+TODO[all]:
+* Come up with an actual name lol
+* Should I include deets on how our syntax
+  _might_ look? I can come up with some
+  examples, but they will be tentative
+  and subject to lots of change
+* Should we decide on an implementation
+  language?
+* What do we output? MIDI? Audio file
+  like MP3/WAV?
+* We need to talk about relevance... but what?
+  It is novel since it supports something
+  other than western music. Do we need to
+  say anything more?
+////
