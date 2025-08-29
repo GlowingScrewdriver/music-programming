@@ -9,7 +9,25 @@ Indian Music_
 This slide deck details the goals, rationale
 and approach to design of this language. In
 addition, options for the technology stack
-for the compiler are also discussed.
+for its compiler are also discussed.
+
+<<<
+
+=== Why?
+* Technology for music synthesis has been
+  around for a long time. Artists have been
+  synthesizing music with dedicated equipment
+  for a long time now; however, this equipment
+  can be expensive and difficult to use.
+* Music programming is an interesting
+  concept, since it eliminates the dependence
+  on expensive equipment for playing synthetic
+  music.
+* There are music programmming languages that
+  are capable of synthesizing many kinds of
+  Western music.
+* However, the genres of Indian music stand
+  underrepresented in this space.
 
 <<<
 
@@ -29,6 +47,11 @@ for the compiler are also discussed.
 * Extensibility to models of music outside
   the Indian umbrella
 * Turing-completeness
+* Music generation. The last thing we want to do
+  is to replace the creativity of the
+  musician-programmer +
+  (real instrumentalists are safe though --
+  synthetic audio will never sound the same)
 
 <<<
 
@@ -138,6 +161,34 @@ limited model of variable use:
 * Other modes of operation, such as an API or
   a REPL, are second priority.
 
+<<<
+
+== The Backend
+The backend of this compiler will be 3rd-party
+synthesizer software. One possibilty^1^ is a
+synthesizer library that can handle the Musical
+Instrument Digital Interface (MIDI):
+
+* The compiler emits a sequence of MIDI
+  messages
+* These messages are instructions for
+  a _virtual instrument_
+* The virtual instrument is characterized
+  by audio samples at various frequencies
+* Given these, the synthesizer software
+  outputs audio that is (hopefully) a close
+  approximation of something played on a
+  real instrument
+
+'''
+
+1. MIDI is a very extensive specification. While
+it supports everything we need, it may be
+difficult to navigate, which is why this is
+a tentative decision.
+
+<<<
+
 ////
 TODO[all]:
 * Come up with an actual name lol
@@ -153,4 +204,6 @@ TODO[all]:
   It is novel since it supports something
   other than western music. Do we need to
   say anything more?
+  EDIT: Added something near the beginning of the
+  slide deck.
 ////
