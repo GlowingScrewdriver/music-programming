@@ -1,4 +1,4 @@
-= Music Programming Language
+= A Music Programming Language for the Indian Context
 
 <<<
 
@@ -13,7 +13,11 @@ for its compiler are also discussed.
 
 <<<
 
-=== Why?
+= Background
+
+<<<
+
+== Why?
 * Technology for music synthesis has been
   around for a long time. Artists have been
   synthesizing music with dedicated equipment
@@ -25,21 +29,19 @@ for its compiler are also discussed.
   music.
 * There are music programmming languages that
   are capable of synthesizing many kinds of
-  Western music.
+  Western music. These include Alda, Sonic Pi
+  and ChucK
 * However, the genres of Indian music stand
   underrepresented in this space.
 
 <<<
 
 == Goals
-* Support for the Carnatic classical music model
-  (at least)
+* Representation of the Carnatic classical
+  music model (at least)
 * High-level -- focus on _musical_ constructs,
   rather than more generic _audio_ constructs
 * Interoperability with standard interfaces
-// TODO[Vamshi]: Can we promise this? Interfacing
-// with MIDI is the only way I can think of doing
-// this ATM.
 
 === Explicit Non-Goals
 * Support for general-purpose programming
@@ -47,7 +49,8 @@ for its compiler are also discussed.
 * Extensibility to models of music outside
   the Indian umbrella
 * Turing-completeness
-* Music generation. The last thing we want to do
+* Music generation (i.e., IP creation). The
+  last thing we want to do
   is to replace the creativity of the
   musician-programmer +
   (real instrumentalists are safe though --
@@ -55,9 +58,16 @@ for its compiler are also discussed.
 
 <<<
 
-== Approach to Language Design
+= Language
+
+image::demo-samples/notation.png[]
+
+<<<
+
+== Notation: Inspiration for the Language Design
 Much inspiration is drawn from existing
-notation systems.
+notation systems, a sample of which can be
+seen on the previous slide.
 
 * Both the Carnatic and Hindustani styles of
   Indian classical music have well-established
@@ -65,10 +75,17 @@ notation systems.
 * Many concepts of classical music can
   be generalized to other genres of Indian
   music as well
-// TODO[Varsha]: Is the above true?
 * Thus, these notational systems already capture
   many of the constructs that our language
   would support
+
+Although notational conventions aren't strictly
+standardized, there have been musicians who
+have carefully designed and documented
+extensive notational systems for their work;
+for instance, Subbarama Dikshitar's notational
+system used in his _Sangita Sampradaya
+Pradarshini_.
 
 <<<
 
@@ -82,6 +99,9 @@ notation systems, will be along these lines:
 * The *tune* is played on some *instrument* ^1^
 * The *instrument* may be *struck* ^2^ at any instance
   of a *note*
+
+The inclusion of the instrument's striking is
+not a feature of existing notation systems.
 
 '''
 
@@ -97,18 +117,18 @@ A _gamakam_ is a controlled variation
 of a note's frequency with time. This concept,
 in its various forms, is a cornerstone of
 Indian music genres.
-// TODO[Varsha]: Is this too much of a
-// blanked statement? Can we really model
-// other forms of music with careful
-// usage of gamakams?
 
 A sound at a single frequency is a flat note:
+
+audio::demo-samples/flat.mp3[]
 // TODO: Insert audio sample
 
 However, when the frequency of this note is
-oscillated with time, we get a "quivering"
-note:
+oscillated in a certain way with time, we
+get a sort of "oscillating note":
 // TODO: Insert audio sample
+
+audio::demo-samples/kampitam.mp3[]
 
 This type of _gamakam_ is called the _kampitam_.
 
@@ -120,9 +140,7 @@ with different names.
 
 == Borrowing from General-Purpose Programming
 This language will borrow a very limited set
-of ideas from general-purpose programming,
-each of which maps to some technique used
-in notation:
+of ideas from general-purpose programming:
 
 * Loops (for repeating lines)
 * Variables (for aliases and shorthands)
@@ -138,14 +156,26 @@ types.
 <<<
 
 == On Variables
-The main purposes of variables will be code
-reuse and shorthands. To support these
-causes, this language will adopt a
+This language will adopt a
 limited model of variable use:
 
 * Variables can be assigned only once
 * No forward declarations or type declarations
 * Variable references will be type-checked
+
+This model of variable is intended for
+two primary purposes:
+
+* Code reuse, e.g. for indicating a line
+  of music that appears in multiple points
+  in a song.
+* Aliases, e.g. for using a different name
+  for a type of _gamakam_ (since these names
+  vary across genres)
+
+<<<
+
+= Tooling
 
 <<<
 
@@ -161,12 +191,18 @@ limited model of variable use:
 * Other modes of operation, such as an API or
   a REPL, are second priority.
 
+Such an interface will allow for portability
+to other platforms with ease, even for a
+platform without standard input/output,
+filesystems and stable audio interfaces.
+
 <<<
 
 == The Backend
 The backend of this compiler will be 3rd-party
 synthesizer software. One possibilty^1^ is a
-synthesizer library that can handle the Musical
+synthesizer library (such as FluidSynth)
+that can handle the Musical
 Instrument Digital Interface (MIDI):
 
 * The compiler emits a sequence of MIDI
@@ -189,21 +225,11 @@ a tentative decision.
 
 <<<
 
+= Yup.
+
 ////
 TODO[all]:
 * Come up with an actual name lol
-* Should I include deets on how our syntax
-  _might_ look? I can come up with some
-  examples, but they will be tentative
-  and subject to lots of change
-* Should we decide on an implementation
-  language?
 * What do we output? MIDI? Audio file
   like MP3/WAV?
-* We need to talk about relevance... but what?
-  It is novel since it supports something
-  other than western music. Do we need to
-  say anything more?
-  EDIT: Added something near the beginning of the
-  slide deck.
 ////
