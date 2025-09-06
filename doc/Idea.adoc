@@ -1,0 +1,235 @@
+= A Music Programming Language for the Indian Context
+
+<<<
+
+== The Idea
+A language to _programmatically synthesize
+Indian Music_
+
+This slide deck details the goals, rationale
+and approach to design of this language. In
+addition, options for the technology stack
+for its compiler are also discussed.
+
+<<<
+
+= Background
+
+<<<
+
+== Why?
+* Technology for music synthesis has been
+  around for a long time. Artists have been
+  synthesizing music with dedicated equipment
+  for a long time now; however, this equipment
+  can be expensive and difficult to use.
+* Music programming is an interesting
+  concept, since it eliminates the dependence
+  on expensive equipment for playing synthetic
+  music.
+* There are music programmming languages that
+  are capable of synthesizing many kinds of
+  Western music. These include Alda, Sonic Pi
+  and ChucK
+* However, the genres of Indian music stand
+  underrepresented in this space.
+
+<<<
+
+== Goals
+* Representation of the Carnatic classical
+  music model (at least)
+* High-level -- focus on _musical_ constructs,
+  rather than more generic _audio_ constructs
+* Interoperability with standard interfaces
+
+=== Explicit Non-Goals
+* Support for general-purpose programming
+  constructs (data structures, functions, etc.)
+* Extensibility to models of music outside
+  the Indian umbrella
+* Turing-completeness
+* Music generation (i.e., IP creation). The
+  last thing we want to do
+  is to replace the creativity of the
+  musician-programmer +
+  (real instrumentalists are safe though --
+  synthetic audio will never sound the same)
+
+<<<
+
+= Language
+
+image::demo-samples/notation.png[]
+
+<<<
+
+== Notation: Inspiration for the Language Design
+Much inspiration is drawn from existing
+notation systems, a sample of which can be
+seen on the previous slide.
+
+* Both the Carnatic and Hindustani styles of
+  Indian classical music have well-established
+  systems of notation
+* Many concepts of classical music can
+  be generalized to other genres of Indian
+  music as well
+* Thus, these notational systems already capture
+  many of the constructs that our language
+  would support
+
+Although notational conventions aren't strictly
+standardized, there have been musicians who
+have carefully designed and documented
+extensive notational systems for their work;
+for instance, Subbarama Dikshitar's notational
+system used in his _Sangita Sampradaya
+Pradarshini_.
+
+<<<
+
+== The Music Model
+The programming model, inspired by classical
+notation systems, will be along these lines:
+
+* A *tune* is made up of a series of *notes*
+* Each *note* lasts for a certain *duration* of time
+* A *note* may have a *_gamakam_* applied to it
+* The *tune* is played on some *instrument* ^1^
+* The *instrument* may be *struck* ^2^ at any instance
+  of a *note*
+
+The inclusion of the instrument's striking is
+not a feature of existing notation systems.
+
+'''
+
+1. an instrument is characterised by its waveform at
+  various notes
+2. "striking" is the action that makes sound. For example,
+  plucking a string, or tapping a membrane.
+
+<<<
+
+== A Note on _gamakam_
+A _gamakam_ is a controlled variation
+of a note's frequency with time. This concept,
+in its various forms, is a cornerstone of
+Indian music genres.
+
+A sound at a single frequency is a flat note:
+
+audio::demo-samples/flat.mp3[]
+// TODO: Insert audio sample
+
+However, when the frequency of this note is
+oscillated in a certain way with time, we
+get a sort of "oscillating note":
+// TODO: Insert audio sample
+
+audio::demo-samples/kampitam.mp3[]
+
+This type of _gamakam_ is called the _kampitam_.
+
+NOTE: All of this is in Carnatic parlance, but
+is applicable to other forms of music, albeit
+with different names.
+
+<<<
+
+== Borrowing from General-Purpose Programming
+This language will borrow a very limited set
+of ideas from general-purpose programming:
+
+* Loops (for repeating lines)
+* Variables (for aliases and shorthands)
+* Type checking (a _gamakam_ is applied to a
+  note, not an instrument)
+* Parallelism (for simultaneous instruments)
+
+Certain ideas are overkills for this
+language, like user-defined functions,
+control flow structures and user-defined data
+types.
+
+<<<
+
+== On Variables
+This language will adopt a
+limited model of variable use:
+
+* Variables can be assigned only once
+* No forward declarations or type declarations
+* Variable references will be type-checked
+
+This model of variable is intended for
+two primary purposes:
+
+* Code reuse, e.g. for indicating a line
+  of music that appears in multiple points
+  in a song.
+* Aliases, e.g. for using a different name
+  for a type of _gamakam_ (since these names
+  vary across genres)
+
+<<<
+
+= Tooling
+
+<<<
+
+== The Compiler Interface
+* The first iteration of the compiler will
+  support a file-based interface (either using
+  a filesystem or stdin/stdout), where
+  - the input is a string, holding a program
+    describing a tune
+  - the output is a file capturing the tune
+* Implementing playback as a mode
+  of output on top of this base is trivial
+* Other modes of operation, such as an API or
+  a REPL, are second priority.
+
+Such an interface will allow for portability
+to other platforms with ease, even for a
+platform without standard input/output,
+filesystems and stable audio interfaces.
+
+<<<
+
+== The Backend
+The backend of this compiler will be 3rd-party
+synthesizer software. One possibilty^1^ is a
+synthesizer library (such as FluidSynth)
+that can handle the Musical
+Instrument Digital Interface (MIDI):
+
+* The compiler emits a sequence of MIDI
+  messages
+* These messages are instructions for
+  a _virtual instrument_
+* The virtual instrument is characterized
+  by audio samples at various frequencies
+* Given these, the synthesizer software
+  outputs audio that is (hopefully) a close
+  approximation of something played on a
+  real instrument
+
+'''
+
+1. MIDI is a very extensive specification. While
+it supports everything we need, it may be
+difficult to navigate, which is why this is
+a tentative decision.
+
+<<<
+
+= Yup.
+
+////
+TODO[all]:
+* Come up with an actual name lol
+* What do we output? MIDI? Audio file
+  like MP3/WAV?
+////
