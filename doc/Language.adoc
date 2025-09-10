@@ -19,6 +19,7 @@ specifications as regular expressions:
 | LIST_END      | `}`
 | SVARA_NAME    | `[a-zA-Z].*`
 | GAMAKA_NAME   | `:.*`
+| GAMAKA_END    | `;`
 |===
 
 Tokens must be separated by whitespace characters
@@ -65,4 +66,6 @@ _svaram_, _swara_ and _swaram_.
 A single _gamaka_.
 
 A GAMAKA is::
-* a GAMAKA_NAME
+* a GAMAKA_NAME, followed by
+* 0 or more SVARAs, followed by
+* a GAMAKA_END

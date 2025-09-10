@@ -29,12 +29,15 @@ class SVARA_NAME (Token):
     pass
 class GAMAKA_NAME (Token):
     pass
+class GAMAKA_END (Token):
+    pass
 
 Pattern_TokenType = (
     ("{", LIST_START),
     ("}", LIST_END),
     (r"[a-zA-Z].*", SVARA_NAME),
-    (r":.*", GAMAKA_NAME)
+    (r":.*", GAMAKA_NAME),
+    (r";", GAMAKA_END),
 )
 def make_token (word: str, line: int, col: int) -> Token:
     for pattern, token_ctor in Pattern_TokenType:
@@ -53,7 +56,9 @@ def tokenize (program):
             # 1. A whitespace ends a token
             if wordl:
                 word = "".join (wordl)
-                yield make_token (word, line, col)
+                # Note that `col` is where the token _ends_,
+                # not starts
+                yield make_token (word, line, col - len (word))
                 wordl = []
             if char == "\n":
                 # 2. A newline starts... a new line
