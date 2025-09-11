@@ -1,0 +1,71 @@
+= Language
+
+== Conventions used in this Document
+* Language constructs are written in capital
+  letters to distinguish them from the concepts
+  they represent. +
+  For instance, A LINE is the lexical element
+  that represents a line of music.
+* Literals are surrounded by single quotes.
+
+== Tokens
+The following table lists tokens and their
+specifications as regular expressions:
+
+[options="header",cols="1,1"]
+|===
+| Token         | Regular Expression
+| LIST_START    | `{`
+| LIST_END      | `}`
+| SVARA_NAME    | `,|[a-zA-Z].*`
+| GAMAKA_NAME   | `:.*`
+| GAMAKA_END    | `;`
+|===
+
+Tokens must be separated by whitespace characters
+(space, tab, newline, etc.).
+
+== Lexical structure
+
+=== SONG
+The top-level lexical structure of the program is
+a SONG. In other words, every program is a SONG.
+
+A SONG is::
+* a LIST of LINES.
+
+=== LIST
+A homogenous list of elements. The length of a
+LIST is the number of elements in the list.
+
+A LIST of SOMETHINGs is::
+* a LIST_START, followed by
+* any number of SOMETHINGs, followed by
+* a LIST_END
+
+=== LINE
+A line of music.
+
+A LINE is::
+* a LIST of SVARAs, followed by
+* a LIST of GAMAKAs
+
+The LIST of SVARAs and LIST of GAMAKAs must
+have the same length.
+
+=== SVARA
+A single _svara_.
+
+A SVARA is::
+* a SVARA_NAME
+
+NOTE: _svara_ is also commonly known/spelt as
+_svaram_, _swara_ and _swaram_.
+
+=== GAMAKA
+A single _gamaka_.
+
+A GAMAKA is::
+* a GAMAKA_NAME, followed by
+* 0 or more SVARAs, followed by
+* a GAMAKA_END
