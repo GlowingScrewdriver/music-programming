@@ -35,7 +35,7 @@ class GAMAKA_END (Token):
 Pattern_TokenType = (
     ("{", LIST_START),
     ("}", LIST_END),
-    (r"[a-zA-Z].*", SVARA_NAME),
+    (r",|[a-zA-Z].*", SVARA_NAME),
     (r":.*", GAMAKA_NAME),
     (r";", GAMAKA_END),
 )

@@ -79,7 +79,16 @@ class LINE (Node):
                 f"got {slen} SVARAs and {glen} GAMAKAs",
                 line, col
             )
-        return cls (line, col, children = (svaras, gamakas))
+        return cls (
+            line, col,
+            children = (svaras.children, gamakas.children)
+        )
+
+    def get_svaras (self) -> Iterable[SVARA]:
+        return self.children [0]
+
+    def get_gamakas (self) -> Iterable[SVARA]:
+        return self.children [1]
 
 class LIST (Node):
     @classmethod
@@ -123,8 +132,11 @@ class SONG (Node):
     def get (cls, tokens: list[t.Token]):
         line, col = tokens [0].line, tokens [0].col
         lines = LIST.get_of_type (tokens, elem_type = LINE)
-        return cls (line, col, children = (lines,))
+        return cls (line, col, children = lines.children)
 
+    def get_svaras (self) -> Iterable[SVARA]:
+        for line in self.children:
+            yield from line.get_svaras ()
 
 def parse (program: list[t.Token]):
     return SONG.get (program)
