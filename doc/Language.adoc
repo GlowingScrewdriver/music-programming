@@ -17,7 +17,7 @@ specifications as regular expressions:
 | Token         | Regular Expression
 | LIST_START    | `{`
 | LIST_END      | `}`
-| SVARA_NAME    | `[a-zA-Z].*`
+| SVARA_NAME    | `,|[a-zA-Z].*`
 | GAMAKA_NAME   | `:.*`
 | GAMAKA_END    | `;`
 |===
