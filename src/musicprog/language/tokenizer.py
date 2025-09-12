@@ -37,7 +37,6 @@ Pattern_TokenType = (
     ("}", LIST_END),
     (r",|[a-zA-Z].*", SVARA_NAME),
     (r":.*", GAMAKA_NAME),
-    (r";", GAMAKA_END),
 )
 def make_token (word: str, line: int, col: int) -> Token:
     for pattern, token_ctor in Pattern_TokenType:

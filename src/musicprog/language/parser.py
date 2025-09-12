@@ -52,10 +52,7 @@ class GAMAKA (Node):
 
         # Get the following svaras
         svaras = []
-        while True:
-            if isinstance (tokens [0], t.GAMAKA_END):
-                tokens.pop (0)
-                break
+        while isinstance (tokens [0], t.SVARA_NAME):
             svaras.append (SVARA.get (tokens))
 
         return cls (
@@ -137,6 +134,10 @@ class SONG (Node):
     def get_svaras (self) -> Iterable[SVARA]:
         for line in self.children:
             yield from line.get_svaras ()
+
+    def get_gamakas (self) -> Iterable[GAMAKA]:
+        for line in self.children:
+            yield from line.get_gamakas ()
 
 def parse (program: list[t.Token]):
     return SONG.get (program)
