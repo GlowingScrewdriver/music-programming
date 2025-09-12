@@ -38,28 +38,69 @@ SvaraIndices = (
     "da1", "da2",
     "ni1", "ni2",
 )
-def svara_to_rel_note (svara: str):
+def svara_to_rel_note (svara: p.SVARA):
     "Find the relative note for svara `svara`"
-    if svara == ",":
+    sname = svara.name
+    if sname == ",":
         return None
 
-    if svara.endswith ("+"):
+    if sname.endswith ("+"):
         name = svara [:-1]
         octave = +1
-    elif svara.endswith ("-"):
+    elif sname.endswith ("-"):
         name = svara [:-1]
         octave = -1
     else:
-        name = svara
+        name = sname
         octave = 0
     try:
         offset = SvaraIndices.index (name)
     except ValueError:
         raise MusicError (
-            s.line, s.col,
-            f"Not a svara: {name}"
+            svara.line, svara.col,
+            f"Not a svara: {sname}"
         )
     return offset + (octave * 12)
+
+class GamakaSampler:
+    def __init__ (self, checkpoints):
+        self.checkpoints = checkpoints
+        self.positions = sorted (checkpoints.keys ())
+        assert self.positions [0] == 0
+        assert self.positions [-1] == 1
+
+    def sample (self, t, params):
+        assert t >= 0 and t <= 1
+        # Find s, e such that s <= t <= e
+        s, e = None, None
+        for i in range (len (self.positions) - 1):
+            s, e = self.positions [i], self.positions [i + 1]
+            assert s <= t
+            if e >= t:
+                break
+        assert s is not None, e is not None
+        low, high = self.checkpoints [s], self.checkpoints [e]
+        return (
+            (params [high] - params [low])
+            * t
+        )
+
+    def __call__ (self, t, params):
+        return self.sample (t, params)
+
+GamakaCheckpoints = {
+    ":": GamakaSampler ({0: 0, 1: 0}),
+    ":/": GamakaSampler ({0: 0, 1: 1}),
+}
+def gamaka_to_sampler (gamaka: p.GAMAKA):
+    name = gamaka.name
+    sampler = GamakaCheckpoints.get (name)
+    if sampler is None:
+        raise MusicError (
+            gamaka.line, gamaka.col,
+            f"Not a gamaka: {name}"
+        )
+    return sampler
 
 class TuneSegment:
     """
@@ -93,14 +134,14 @@ class TuneSegment:
 
 def song_to_tunesegments (song: p.SONG) -> Iterable[TuneSegment]:
     rel_notes = [
-        svara_to_rel_note (s.name)
+        svara_to_rel_note (s)
         for s in song.get_svaras ()
     ]
     for n in range (1, len (rel_notes)):
         if rel_notes [n] is None:
             rel_notes [n] = rel_notes [n - 1]
     gamakas = [
-        g.name
+        gamaka_to_sampler (g)
         for g in song.get_gamakas ()
     ]
     for n in range (len (rel_notes) - 1):
