@@ -1,4 +1,4 @@
-import language.tokenizer as t
+from . import tokenizer as t
 from typing import Iterable, Self
 
 class ParseError (Exception):

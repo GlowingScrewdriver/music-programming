@@ -1,8 +1,8 @@
 from typing import Iterable
 from mido import Message, MidiTrack, MidiFile
 
-from language import parser as p
-from renderer.common import TuneSegment
+from .. import parser as p
+from .common import TuneSegment
 
 
 class MidiMessenger:

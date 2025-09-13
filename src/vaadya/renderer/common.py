@@ -11,7 +11,7 @@ non-integral); and time is given as a fraction of elapsed
 time in a `TuneSegment`.
 """
 
-import language.parser as p
+from .. import parser as p
 from typing import Iterable
 
 class MusicError (Exception):

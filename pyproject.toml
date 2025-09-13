@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vaadya"
+dependencies = ["mido"]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "vaadya.__version__"}
