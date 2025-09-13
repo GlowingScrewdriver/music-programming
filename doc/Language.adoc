@@ -1,4 +1,26 @@
-= Language
+= The Vaadya Language
+
+This document describes the Vaadya language in
+detail. The specification of the language is
+contained here; if there is a discrepancy between
+the actual implementation and this document,
+this document is correct and the implementation
+is buggy.
+
+== Inspiration for the Language Design
+Vaadya is built around the Indian Classical model
+of music. As such, its syntactical structure is
+heavily influenced by Indian Classical notation
+systems.
+
+Vaadya's syntax is simple by design, favouring
+both the tokenizer implementation and the
+programmer to some extent.
+For instance, tokens are always separated by
+whitespace, and newlines are not significant. As
+a result, a program can be written with a layout
+resembling notation, without restricting the
+programmer to this style.
 
 == Conventions used in this Document
 * Language constructs are written in capital
@@ -8,7 +30,9 @@
   that represents a line of music.
 * Literals are surrounded by single quotes.
 
-== Tokens
+== Syntactical Structure
+
+=== Tokens
 The following table lists tokens and their
 specifications as regular expressions:
 
@@ -17,32 +41,34 @@ specifications as regular expressions:
 | Token         | Regular Expression
 | LIST_START    | `{`
 | LIST_END      | `}`
-| SVARA_NAME    | `,|[a-zA-Z].*`
+| SVARA_NAME    | `,\|[a-zA-Z].*`
 | GAMAKA_NAME   | `:.*`
 |===
 
 Tokens must be separated by whitespace characters
 (space, tab, newline, etc.).
 
-== Lexical structure
+=== Constructs
 
-=== SONG
+==== SONG
 The top-level lexical structure of the program is
 a SONG. In other words, every program is a SONG.
 
 A SONG is::
 * a LIST of LINES.
 
-=== LIST
+==== LIST
 A homogenous list of elements. The length of a
 LIST is the number of elements in the list.
 
-A LIST of SOMETHINGs is::
+A LIST of _SOMETHINGs_ is::
 * a LIST_START, followed by
-* any number of SOMETHINGs, followed by
+* any number of _SOMETHINGs_, followed by
 * a LIST_END
 
-=== LINE
+NOTE: _SOMETHING_ is any lexical element.
+
+==== LINE
 A line of music.
 
 A LINE is::
@@ -52,7 +78,7 @@ A LINE is::
 The LIST of SVARAs and LIST of GAMAKAs must
 have the same length.
 
-=== SVARA
+==== SVARA
 A single _svara_.
 
 A SVARA is::
@@ -61,9 +87,62 @@ A SVARA is::
 NOTE: _svara_ is also commonly known/spelt as
 _svaram_, _swara_ and _swaram_.
 
-=== GAMAKA
+==== GAMAKA
 A single _gamaka_.
 
 A GAMAKA is::
 * a GAMAKA_NAME, followed by
-* 0 or more SVARAs, followed by
+* 0 or more SVARAs
+
+== Semantics
+=== Tune: Frequency as a Function of Time
+A program (i.e. a SONG) describes a tune. This tune
+is essentially a function that maps time to frequency;
+in other words, the tune specifies what frequency
+should be played at what point in time.
+Each LINE of the SONG describes a smaller tune,
+and these are concatenated to form the full
+tune -- thus, the choice of how the tune is split
+up into individual LINEs is immaterial.
+
+=== SVARAs, GAMAKAs and the Passage of Time
+Each LINE describes a smaller tune, defined by
+SVARAs and their associated GAMAKAs. A SVARA defines
+the tune's frequency _at a point in_ time, while
+a GAMAKA defines the tune's frequency _over
+an interval_ of time.
+
+Each SVARA's associated GAMAKA covers a
+certain interval of time; this interval is a
+multiple of a unit of time that we will call
+a _beat_. The tune's frequency over this interval
+is defined as follows:
+
+* The SVARA defines the frequency at the
+  beginning of the interval
+* The associated GAMAKA defines the frequency
+  at all points between the start and end of
+  the interval
+* The next SVARA defines the frequency at
+  the end of the interval
+
+By default, a GAMAKA covers one beat. A ","
+after a SVARA causes its GAMAKA to last
+an extra beat.
+
+The following is an attempt to illustrate
+SVARAs, GAMAKAs, and their relation with time.
+
+ {    ga2      sa       ri2     ,    }
+ {    :        :/       :-           }
+ ┄┄
+      0        1        2       3
+   ───┬────────┬────────┬───────┬─────> time (beats)
+               ╷╷      ╷╷
+               │╰──────╯│
+               │  (2)   │
+              (1)      (3)
+ ┄┄
+  (1) Defined by svara "sa"
+  (2) Defined by gamaka ":/"
+  (3) Defined by svara "ri2"
