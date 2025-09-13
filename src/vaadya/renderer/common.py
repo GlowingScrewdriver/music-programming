@@ -115,15 +115,17 @@ class TuneSegment:
     * a starting svara
     * an ending svara
     * the gamaka associated with the starting svara
+    * a duration
 
     `TuneSegment`s are consumed by a backend when
     rendering music.
     """
-    def __init__ (self, start_svara, end_svara, gamaka):
+    def __init__ (self, start_svara, end_svara, gamaka, duration):
         self.gamaka = gamaka
         self.start_svara = start_svara
         self.end_svara = end_svara
         self.gamaka = gamaka
+        self.duration = duration
 
     def __repr__ (self):
         cons = self.__class__.__name__
@@ -133,22 +135,24 @@ class TuneSegment:
         return f'{cons}({start}, {end}, {gamaka})'
 
 def song_to_tunesegments (song: p.SONG) -> Iterable[TuneSegment]:
-    rel_notes = [
+    svaras = (*song.get_svaras (),)
+    s_names = [
         svara_to_rel_note (s)
-        for s in song.get_svaras ()
+        for s in svaras
     ]
-    for n in range (1, len (rel_notes)):
-        if rel_notes [n] is None:
-            rel_notes [n] = rel_notes [n - 1]
-    gamakas = [
+    s_names.append (s_names [-1])
+    durations = tuple (
+        s.get_duration ()
+        for s in svaras
+    )
+    g_samplers = tuple (
         gamaka_to_sampler (g)
         for g in song.get_gamakas ()
-    ]
-    for n in range (len (rel_notes) - 1):
-        start = rel_notes [n]
-        end = rel_notes [n + 1]
-        gamaka = gamakas [n]
-        yield TuneSegment (start, end, gamaka)
-    yield TuneSegment (
-        rel_notes [-1], rel_notes [-1], gamakas [-1]
     )
+
+    for i in range (len (svaras)):
+        start = s_names [i]
+        end = s_names [i + 1]
+        sampler = g_samplers [i]
+        duration = durations [i]
+        yield TuneSegment (start, end, sampler, duration)
