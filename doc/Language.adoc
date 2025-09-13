@@ -86,6 +86,8 @@ A SVARA is::
 * a SVARA_NAME, followed by
 * 0 or more GAPs
 
+The number of GAPs is the duration of the SVARA.
+
 NOTE: _svara_ is also commonly known/spelt as
 _svaram_, _swara_ and _swaram_.
 
@@ -114,11 +116,12 @@ the tune's frequency _at a point in_ time, while
 a GAMAKA defines the tune's frequency _over
 an interval_ of time.
 
-Each SVARA's associated GAMAKA covers a
-certain interval of time; this interval is a
-multiple of a unit of time that we will call
-a _beat_. The tune's frequency over this interval
-is defined as follows:
+Each SVARA has an associated GAMAKA and _duration_.
+This duration is a multiple of a unit of time
+that we will call a _beat_. A SVARA's duration
+defines the interval of time between that SVARA
+and the next. The tune's frequency over this
+interval is defined as follows:
 
 * The SVARA defines the frequency at the
   beginning of the interval
@@ -128,23 +131,23 @@ is defined as follows:
 * The next SVARA defines the frequency at
   the end of the interval
 
-By default, a GAMAKA covers one beat. A ","
-after a SVARA causes its GAMAKA to last
-an extra beat.
+By default, a SVARA's duration is 1 beat. Every
+"," after a SVARA increases the duration by 1 beat.
 
 The following is an attempt to illustrate
 SVARAs, GAMAKAs, and their relation with time.
 
- {    ga2      sa       ri2     ,    }
- {    :        :/       :-           }
+ {    ga2      sa       ri2     ,     ga2 }
+ {    :        :/       :-                }
  ┄┄
-      0        1        2       3
-   ───┬────────┬────────┬───────┬─────> time (beats)
-               ╷╷      ╷╷
-               │╰──────╯│
-               │  (2)   │
+      0        1        2       3      4
+   ───┬────────┬────────┬───────┬──────┬────> time (beats)
+               ╷╷      ╷╷╷            ╷
+               │╰──────╯│╰────────────╯
+               │  (2)   │      (4)
               (1)      (3)
  ┄┄
-  (1) Defined by svara "sa"
-  (2) Defined by gamaka ":/"
-  (3) Defined by svara "ri2"
+  (1) Defined by svara "sa"   (point)
+  (2) Defined by gamaka ":/"  (interval)
+  (3) Defined by svara "ri2"  (point)
+  (4) Defined by gamaka ":-"  (interval)
