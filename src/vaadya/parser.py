@@ -1,4 +1,4 @@
-import language.tokenizer as t
+from . import tokenizer as t
 from typing import Iterable, Self
 
 class ParseError (Exception):
@@ -27,16 +27,27 @@ class Node:
 class SVARA (Node):
     @classmethod
     def get (cls, tokens: list[t.Token]):
+        # Get the svara name
         tok = tokens.pop (0)
         if not isinstance (tok, t.SVARA_NAME):
             raise ParseError (
                 "Expected SVARA_NAME",
                 tok.line, tok.col
             )
+        name = tok.word
+        # Count the following commas
+        duration = 1
+        while isinstance (tokens [0], t.GAP):
+            tokens.pop (0)
+            duration += 1
+
         return cls (
             tok.line, tok.col,
-            children = (), name = tok.word
+            children = (duration,), name = tok.word
         )
+
+    def get_duration (self) -> int:
+        return self.children [0]
 
 class GAMAKA (Node):
     @classmethod

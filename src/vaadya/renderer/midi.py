@@ -1,8 +1,8 @@
 from typing import Iterable
 from mido import Message, MidiTrack, MidiFile
 
-from language import parser as p
-from renderer.common import TuneSegment
+from .. import parser as p
+from .common import TuneSegment
 
 
 class MidiMessenger:
@@ -94,8 +94,9 @@ def render (segments: Iterable[TuneSegment], outfile: str):
     for seg in segments:
         msgs.extend (messenger.play_note (seg.start_svara))
         #messenger.advance (ticks = 200)
-        for tick in range (200):
-            t = (tick / 200) ** 5
+        dur_ticks = 200 * seg.duration
+        for tick in range (dur_ticks):
+            t = (tick / dur_ticks) ** 5
             offset = seg.gamaka.sample (
                 t, (seg.start_svara, seg.end_svara)
             )
