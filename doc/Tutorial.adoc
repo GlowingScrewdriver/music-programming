@@ -1,0 +1,25 @@
+= Vaadya Tutorial
+
+This tutorial is to get you started programming in
+Vaadya. It does not assume any formal musical
+training. However, it does require the
+
+== 0. Your First Vaadya Program
+Start with the following code:
+
+.tune.vdy
+[source]
+----
+{
+  { sa }
+  { :  }
+}
+----
+
+Compile it as follows:
+
+ python3 -m vaadya ./tune.vdy ./tune.mid
+
+And play it like this:
+
+ fluidsynth ./tune.mid
