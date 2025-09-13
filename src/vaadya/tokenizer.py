@@ -27,6 +27,8 @@ class LIST_END (Token):
     pass
 class SVARA_NAME (Token):
     pass
+class GAP (Token):
+    pass
 class GAMAKA_NAME (Token):
     pass
 class GAMAKA_END (Token):
@@ -35,7 +37,8 @@ class GAMAKA_END (Token):
 Pattern_TokenType = (
     ("{", LIST_START),
     ("}", LIST_END),
-    (r",|[a-zA-Z].*", SVARA_NAME),
+    (r"[a-zA-Z].*", SVARA_NAME),
+    (r",", GAP),
     (r":.*", GAMAKA_NAME),
 )
 def make_token (word: str, line: int, col: int) -> Token:
