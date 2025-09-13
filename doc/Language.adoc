@@ -17,8 +17,9 @@ specifications as regular expressions:
 | Token         | Regular Expression
 | LIST_START    | `{`
 | LIST_END      | `}`
-| SVARA_NAME    | `,|[a-zA-Z].*`
+| SVARA_NAME    | `[a-zA-Z].*`
 | GAMAKA_NAME   | `:.*`
+| GAP           | `,`
 |===
 
 Tokens must be separated by whitespace characters
@@ -53,10 +54,11 @@ The LIST of SVARAs and LIST of GAMAKAs must
 have the same length.
 
 === SVARA
-A single _svara_.
+A single _svara_, with an associated duration.
 
 A SVARA is::
-* a SVARA_NAME
+* a SVARA_NAME, followed by
+* 0 or more GAPs
 
 NOTE: _svara_ is also commonly known/spelt as
 _svaram_, _swara_ and _swaram_.
